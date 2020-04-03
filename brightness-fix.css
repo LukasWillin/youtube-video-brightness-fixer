@@ -1,0 +1,14 @@
+html
+{
+    --brf-vfloat-brightness: 1.1;
+    --brf-vfloat-contrast: 0.85;
+    --brf-vfloat-sepia: 0;
+    --brf-vfloat-saturate: 1.1;
+    --brf-vdeg-hue-rotate: -4deg;
+}
+
+video
+{
+    /* Video Brightness fix */
+    filter: brightness(var(--brf-vfloat-brightness)) contrast(var(--brf-vfloat-contrast)) saturate(var(--brf-vfloat-saturate)) hue-rotate(var(--brf-vdeg-hue-rotate)) sepia(var(--brf-vfloat-sepia));
+}
