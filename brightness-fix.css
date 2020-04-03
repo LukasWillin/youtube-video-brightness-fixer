@@ -1,10 +1,10 @@
 html
 {
-    --brf-vfloat-brightness: 1.1;
-    --brf-vfloat-contrast: 0.85;
+    --brf-vfloat-brightness: 1;
+    --brf-vfloat-contrast: 1;
     --brf-vfloat-sepia: 0;
-    --brf-vfloat-saturate: 1.1;
-    --brf-vdeg-hue-rotate: -30deg;
+    --brf-vfloat-saturate: 1;
+    --brf-vdeg-hue-rotate: 0deg;
 }
 
 video
