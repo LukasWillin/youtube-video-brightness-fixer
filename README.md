@@ -7,3 +7,4 @@ Follow the instructions here: https://developer.mozilla.org/en-US/docs/Mozilla/A
 
 #### Find my progress in the Projects Tab
 
+https://github.com/LukasWillin/youtube-video-brightness-fixer/projects/1
