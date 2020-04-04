@@ -1,5 +1,6 @@
-# youtube-video-brightness-fixer
-Fixes brightness issues with youtube videos
+# Enlight-YT
+
+Aims to fix brightness issues with youtube videos.
 
 # Testing it locally
 
