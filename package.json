@@ -1,0 +1,32 @@
+{
+  "name": "enlight-yt",
+  "version": "1.0.0",
+  "description": "Enlight-YT aims to fix video brightness issues.",
+  "main": "brightness-fix.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukasWillin/youtube-video-brightness-fixer.git"
+  },
+  "keywords": [
+    "youtube",
+    "video",
+    "brightness"
+  ],
+  "author": "Lukas Willin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LukasWillin/youtube-video-brightness-fixer/issues"
+  },
+  "homepage": "https://github.com/LukasWillin/youtube-video-brightness-fixer#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0"
+  },
+  "dependencies": {
+    "jshint": "^2.11.0"
+  }
+}

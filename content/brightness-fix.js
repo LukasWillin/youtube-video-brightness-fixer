@@ -1,6 +1,16 @@
 
 (function() {
 
+    /**
+     * Check and set a global guard variable.
+     * If this content script is injected into the same page again,
+     * it will do nothing next time.
+     */
+    if (window.enlightYTInitialised) 
+        return;
+    
+    window.enlightYTInitialised = true;
+
     const STORAGE_KEY = 'enlight-yt';
 
     const VAR_KEY_BRIGHTNESS = '--brf-vfloat-brightness';
@@ -81,13 +91,50 @@
         setSaturate: setSaturate
     };
 
-    // EnlightYT.setBrightness(10);
+    // EnlightYT.setBrightness(0.9);
     // EnlightYT.setContrast(1);
-    // EnlightYT.setSaturate(4);
+    // EnlightYT.setSaturate(1);
     // EnlightYT.setHueRotate(0);
     // EnlightYT.setSepia(0);
 
     restoreFromStorage();
+
+    function applyMessage(fn, message)
+    {
+        return fn.apply(null, message.args);
+    }
+
+    /**
+     * Listen for messages from the background script.
+     * Call "beastify()" or "reset()".
+     */
+    browser.runtime.onMessage.addListener((message) =>
+    {
+        switch (message.command)
+        {
+            case 'set-brightness':
+                applyMessage(setBrightness, message);
+                break;
+            case 'set-contrast':
+                applyMessage(setContrast, message);
+                break;
+            case 'set-saturate':
+                applyMessage(setSaturate, message);
+                break;
+            case 'set-hue-rotate':
+                applyMessage(setHueRotate, message);
+                break;
+            case 'set-sepia':
+                applyMessage(setSepia, message);
+                break;
+            case 'console-log':
+                console.log.apply(console, message.args);
+                break;
+            default:
+                console.debug(message);
+                break;
+        }
+    });
 
     console.log("Script ran to end");
 

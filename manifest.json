@@ -7,16 +7,27 @@
     "icons": {
         "48": "icons/yt-brf.jpg"
     },
+
+    "permissions": [
+        "tabs"
+    ],
+    
+    "browser_action": {
+        "default_icon": "icons/yt-brf.jpg",
+        "default_title": "Enlight YT",
+        "default_popup": "popup/enlight-yt-popup.html"
+    },
+    
     "content_scripts": [
         {
             "matches": [
                 "*://*.youtube.com/*"
             ],
             "js": [
-                "brightness-fix.js"
+                "content/brightness-fix.js"
             ],
             "css": [
-                "brightness-fix.css"
+                "content/brightness-fix.css"
             ]
         }
     ]
