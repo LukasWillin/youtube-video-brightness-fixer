@@ -1,3 +1,5 @@
+const URL_YT = '*://*.youtube.com/*';
+
 // browser.tabs.create({url: "/my-page.html"}).then(() => {
 //     browser.tabs.executeScript({
 //       code: `console.log('location:', window.location.href);`
@@ -81,10 +83,9 @@ function sendMessage(tab, message) : Promise<object>
 function loadSettings(tab)
 {
     return browser.tabs.sendMessage(tab.id, { 'command': 'get-settings' })
-        .then(response =>
+        .then(message =>
         {
-            console.log("Response from the content script:");
-            console.log(response);
+            fieldBrightness.value = JSON.stringify(message.response['--brf-vfloat-brightness']);
         }).catch(handleError);
 }
 
@@ -100,7 +101,7 @@ function sendMessageToActive(message)
         });
 }
 
-const fieldBrightness = document.querySelector('input#field-brightness');
+const fieldBrightness : HTMLInputElement = document.querySelector('input#field-brightness');
 const fieldContrast = document.querySelector('input#field-contrast');
 const fieldSaturate = document.querySelector('input#field-saturate');
 const fieldHueRotate = document.querySelector('input#field-hue-rotate');
@@ -165,5 +166,11 @@ fieldSepia.addEventListener('change', e =>
         args: [eventTarget.valueAsNumber]
     });
 });
+
+browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
+    .then(tabs => {
+         return tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found');
+    })
+    .catch(handleError);
 
 console.log("enlight-yt-popup.js loaded");

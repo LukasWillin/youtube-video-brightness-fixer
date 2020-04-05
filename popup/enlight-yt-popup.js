@@ -1,3 +1,4 @@
+const URL_YT = '*://*.youtube.com/*';
 // browser.tabs.create({url: "/my-page.html"}).then(() => {
 //     browser.tabs.executeScript({
 //       code: `console.log('location:', window.location.href);`
@@ -68,9 +69,8 @@ function sendMessage(tab, message) {
 }
 function loadSettings(tab) {
     return browser.tabs.sendMessage(tab.id, { 'command': 'get-settings' })
-        .then(response => {
-        console.log("Response from the content script:");
-        console.log(response);
+        .then(message => {
+        fieldBrightness.value = JSON.stringify(message.response['--brf-vfloat-brightness']);
     }).catch(handleError);
 }
 function sendMessageToActive(message) {
@@ -126,4 +126,9 @@ fieldSepia.addEventListener('change', e => {
         args: [eventTarget.valueAsNumber]
     });
 });
+browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
+    .then(tabs => {
+    return tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found');
+})
+    .catch(handleError);
 console.log("enlight-yt-popup.js loaded");
