@@ -1,6 +1,7 @@
 
 import { CSS_KEYS, CSS_CACHE_MAP } from '../shared/cssKeys';
 
+// eslint-disable-next-line no-unused-vars
 import { IMessage, ISettings } from '../shared/types';
 
 let inititalised = false;
@@ -56,13 +57,9 @@ let inititalised = false;
 
     function setCSSVar(key : string, value : any, type : string = '')
     {
-        console.log(`set css variable > ${key}: ${value}${type};`);
-        
         setLocalStorage(CSS_CACHE_MAP[key], value);
         
         root.style.setProperty(key, `${value}${type}`);
-
-        console.log("done");
     }
 
     function setBrightness(vFloat)
@@ -138,7 +135,7 @@ let inititalised = false;
         }
     });
 
-    console.log("Script content ran to end");
+    console.log('>> content-script loaded');
 
 })();
 

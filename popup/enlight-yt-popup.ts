@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { IMessage, ISettings, SettingsResponseMessage } from '../shared/types';
 
 const URL_YT = '*://*.youtube.com/*';
@@ -70,9 +71,9 @@ const URL_YT = '*://*.youtube.com/*';
  */
 function handleError(error)
 {
-    document.querySelector("#popup-content").classList.add("hidden");
-    document.querySelector("#error-content").classList.remove("hidden");
-    document.querySelector("#error-content-exception").innerHTML = JSON.stringify(error);
+    document.querySelector('#popup-content').classList.add('hidden');
+    document.querySelector('#error-content').classList.remove('hidden');
+    document.querySelector('#error-content-exception').innerHTML = JSON.stringify(error);
     console.error(`Error in Enlight-YT: ${error.message}`);
 }
 
@@ -115,70 +116,68 @@ const fieldSepia : HTMLInputElement  = document.querySelector('input#field-sepia
 
 fieldBrightness.addEventListener('change', e =>
 {
-    console.debug("event-change-brightness:", e);
+    console.debug('event-change-brightness:', e);
 
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: "set-brightness",
+        command: 'set-brightness',
         args: [eventTarget.valueAsNumber]
     });
 });
 
 fieldContrast.addEventListener('change', e =>
 {
-    console.debug("event-change-contrast:", e);
+    console.debug('event-change-contrast:', e);
 
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: "set-contrast",
+        command: 'set-contrast',
         args: [eventTarget.valueAsNumber]
     });
 });
 
 fieldSaturate.addEventListener('change', e =>
 {
-    console.debug("event-change-saturate:", e);
+    console.debug('event-change-saturate:', e);
 
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: "set-saturate",
+        command: 'set-saturate',
         args: [eventTarget.valueAsNumber]
     });
 });
 
 fieldHueRotate.addEventListener('change', e =>
 {
-    console.debug("event-change-hue-rotate:", e);
+    console.debug('event-change-hue-rotate:', e);
 
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: "set-hue-rotate",
+        command: 'set-hue-rotate',
         args: [eventTarget.valueAsNumber]
     });
 });
 
 fieldSepia.addEventListener('change', e =>
 {
-    console.debug("event-change-sepia:", e);
+    console.debug('event-change-sepia:', e);
 
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: "console-log",
+        command: 'console-log',
         args: [eventTarget.valueAsNumber]
     });
 });
 
 browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
-    .then(tabs => {
-         return tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found');
-    })
+    .then(tabs => tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found'))
     .catch(handleError);
 
-console.log("enlight-yt-popup.js loaded");
+console.log('enlight-yt-popup.js loaded');
 
 export {};
