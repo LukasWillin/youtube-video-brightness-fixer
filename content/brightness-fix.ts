@@ -1,15 +1,13 @@
 
-import CSS_KEYS from '../shared/CSSKeys';
+import { CSS_KEYS, CSS_CACHE_MAP } from '../shared/cssKeys';
 
-interface IMessage
-{
-    command: string,
-    args: Array<any>
-}
+import { IMessage, ISettings } from '../shared/types';
 
 let inititalised = false;
 
 (function() {
+
+    let cache : ISettings = {} as ISettings;
 
     /**
      * Check and set a global guard variable.
@@ -25,30 +23,29 @@ let inititalised = false;
 
     //#region Local Storage
 
-    function setLocalStorage(key, value)
+    function setLocalStorage(cacheKey, value)
     {
-        localStorage.setItem(STORAGE_KEY + key, JSON.stringify(value));
+        cache[cacheKey] = value;
+        
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
     }
 
-    function getLocalStorage(key : string = null)
+    function getLocalStorage() : ISettings
     {
-        return key ? JSON.parse(localStorage.getItem(STORAGE_KEY + key)) :
-            {
-                [CSS_KEYS.BRIGHTNESS]: getLocalStorage(CSS_KEYS.BRIGHTNESS),
-                [CSS_KEYS.CONTRAST]: getLocalStorage(CSS_KEYS.CONTRAST),
-                [CSS_KEYS.SATURATE]: getLocalStorage(CSS_KEYS.SATURATE),
-                [CSS_KEYS.HUE_ROTATE]: getLocalStorage(CSS_KEYS.HUE_ROTATE),
-                [CSS_KEYS.SEPIA]: getLocalStorage(CSS_KEYS.SEPIA)
-            };
+        const settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) as ISettings;
+
+        return settings ? settings : { brightness: 1, contrast: 1, saturate: 1, hueRotate: 0, sepia: 0 };
     }
 
     function restoreFromStorage()
     {
-        setBrightness(getLocalStorage(CSS_KEYS.BRIGHTNESS));
-        setContrast(getLocalStorage(CSS_KEYS.CONTRAST));
-        setSaturate(getLocalStorage(CSS_KEYS.SATURATE));
-        setHueRotate(getLocalStorage(CSS_KEYS.HUE_ROTATE));
-        setSepia(getLocalStorage(CSS_KEYS.SEPIA));
+        cache = getLocalStorage();
+
+        setBrightness(cache.brightness);
+        setContrast(cache.contrast);
+        setSaturate(cache.saturate);
+        setHueRotate(cache.hueRotate);
+        setSepia(cache.sepia);
     }
 
     //#endregion
@@ -60,8 +57,11 @@ let inititalised = false;
     function setCSSVar(key : string, value : any, type : string = '')
     {
         console.log(`set css variable > ${key}: ${value}${type};`);
-        setLocalStorage(key, value);
+        
+        setLocalStorage(CSS_CACHE_MAP[key], value);
+        
         root.style.setProperty(key, `${value}${type}`);
+
         console.log("done");
     }
 
@@ -138,6 +138,8 @@ let inititalised = false;
         }
     });
 
-    console.log("Script ran to end");
+    console.log("Script content ran to end");
 
 })();
+
+export {};

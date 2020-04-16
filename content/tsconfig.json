@@ -2,11 +2,10 @@
     "compilerOptions": {
         "target": "es2015",
         "watch": true,
-        "lib": ["DOM", "ES2015"]
+        "lib": ["DOM", "ES2015"],
+        "module": "commonjs"
     },
-    "include": [
-        "./**/*.ts"
-    ],
+    "include": [ "../**/*.ts" ],
     "exclude": [
         "node_modules"
     ]

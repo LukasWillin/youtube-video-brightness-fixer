@@ -1,3 +1,5 @@
+import { IMessage, ISettings, SettingsResponseMessage } from '../shared/types';
+
 const URL_YT = '*://*.youtube.com/*';
 
 // browser.tabs.create({url: "/my-page.html"}).then(() => {
@@ -83,9 +85,13 @@ function sendMessage(tab, message) : Promise<object>
 function loadSettings(tab)
 {
     return browser.tabs.sendMessage(tab.id, { 'command': 'get-settings' })
-        .then(message =>
+        .then((message : SettingsResponseMessage) =>
         {
-            fieldBrightness.value = JSON.stringify(message.response['--brf-vfloat-brightness']);
+            fieldBrightness.value = JSON.stringify(message.response.brightness);
+            fieldContrast.value = JSON.stringify(message.response.contrast);
+            fieldSaturate.value = JSON.stringify(message.response.saturate);
+            fieldHueRotate.value = JSON.stringify(message.response.hueRotate);
+            fieldSepia.value = JSON.stringify(message.response.sepia);
         }).catch(handleError);
 }
 
@@ -102,10 +108,10 @@ function sendMessageToActive(message)
 }
 
 const fieldBrightness : HTMLInputElement = document.querySelector('input#field-brightness');
-const fieldContrast = document.querySelector('input#field-contrast');
-const fieldSaturate = document.querySelector('input#field-saturate');
-const fieldHueRotate = document.querySelector('input#field-hue-rotate');
-const fieldSepia = document.querySelector('input#field-sepia');
+const fieldContrast : HTMLInputElement  = document.querySelector('input#field-contrast');
+const fieldSaturate : HTMLInputElement  = document.querySelector('input#field-saturate');
+const fieldHueRotate : HTMLInputElement  = document.querySelector('input#field-hue-rotate');
+const fieldSepia : HTMLInputElement  = document.querySelector('input#field-sepia');
 
 fieldBrightness.addEventListener('change', e =>
 {
@@ -174,3 +180,5 @@ browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
     .catch(handleError);
 
 console.log("enlight-yt-popup.js loaded");
+
+export {};

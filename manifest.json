@@ -31,5 +31,7 @@
                 "content/brightness-fix.css"
             ]
         }
-    ]
+    ],
+
+    "web_accessible_resources": []
 }
