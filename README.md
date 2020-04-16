@@ -2,7 +2,7 @@
 
 Aims to fix brightness issues with youtube videos.
 
-# Testing/Instaling it locally
+# Testing/Installing it locally
 
 Follow the instructions here: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Installing
 
