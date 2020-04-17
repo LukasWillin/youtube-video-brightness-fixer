@@ -33,15 +33,27 @@ let inititalised = false;
 
     function getLocalStorage() : ISettings
     {
-        const settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) as ISettings;
+        const defaultSettings = { invert: 0, brightness: 1, contrast: 1, saturate: 1, hueRotate: 0, sepia: 0 };
 
-        return settings ? settings : { brightness: 1, contrast: 1, saturate: 1, hueRotate: 0, sepia: 0 };
+        try
+        {
+            const settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) as ISettings;
+
+            return settings ? settings : defaultSettings;
+        }
+        catch(e)
+        {
+            console.error(e);
+        }
+
+        return defaultSettings;
     }
 
     function restoreFromStorage()
     {
         cache = getLocalStorage();
 
+        setInvert(cache.invert);
         setBrightness(cache.brightness);
         setContrast(cache.contrast);
         setSaturate(cache.saturate);
@@ -60,6 +72,11 @@ let inititalised = false;
         setLocalStorage(CSS_CACHE_MAP[key], value);
         
         root.style.setProperty(key, `${value}${type}`);
+    }
+
+    function setInvert(vFloat)
+    {
+        setCSSVar(CSS_KEYS.INVERT, vFloat);
     }
 
     function setBrightness(vFloat)
@@ -103,6 +120,9 @@ let inititalised = false;
     {
         switch (message.command)
         {
+            case MessageCommandEnum.SetInvert:
+                applyMessage(setInvert, message);
+                break;
             case MessageCommandEnum.SetBrightness:
                 applyMessage(setBrightness, message);
                 break;

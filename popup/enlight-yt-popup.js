@@ -112,9 +112,11 @@ function sendMessage(tab, message) {
     return browser.tabs.sendMessage(tab.id, message)
         .catch(handleError);
 }
-function loadSettings(tab) {
+function loadTabSettings(tab) {
     return browser.tabs.sendMessage(tab.id, { 'command': types_1.MessageCommandEnum.GetTabSettings })
         .then((message) => {
+        sliderInvert.value = JSON.stringify(message.response.invert);
+        fieldInvert.value = JSON.stringify(message.response.invert);
         sliderBrightness.value = JSON.stringify(message.response.brightness);
         fieldBrightness.value = JSON.stringify(message.response.brightness);
         sliderContrast.value = JSON.stringify(message.response.contrast);
@@ -135,6 +137,8 @@ function sendMessageToActive(message) {
         return Promise.resolve(null);
     });
 }
+const sliderInvert = document.querySelector('input#slider-invert');
+const fieldInvert = document.querySelector('input#field-invert');
 const sliderBrightness = document.querySelector('input#slider-brightness');
 const fieldBrightness = document.querySelector('input#field-brightness');
 const sliderContrast = document.querySelector('input#slider-contrast');
@@ -155,6 +159,7 @@ function bindFieldAndSlider(fieldInput, sliderInput) {
         fieldInput.value = eventTarget.value;
     });
 }
+bindFieldAndSlider(fieldInvert, sliderInvert);
 bindFieldAndSlider(fieldBrightness, sliderBrightness);
 bindFieldAndSlider(fieldContrast, sliderContrast);
 bindFieldAndSlider(fieldSaturate, sliderSaturate);
@@ -165,6 +170,14 @@ function addNumberInputEventListener(eventListener, ...numberInputs) {
         numberInputs[i].addEventListener('input', eventListener);
     }
 }
+addNumberInputEventListener(e => {
+    // console.debug('event-change-invert:', e);
+    const eventTarget = e.currentTarget;
+    sendMessageToActive({
+        command: types_1.MessageCommandEnum.SetInvert,
+        args: [eventTarget.valueAsNumber]
+    });
+}, fieldInvert, sliderInvert);
 addNumberInputEventListener(e => {
     // console.debug('event-change-brightness:', e);
     const eventTarget = e.currentTarget;
@@ -206,7 +219,7 @@ addNumberInputEventListener(e => {
     });
 }, fieldSepia, sliderSepia);
 browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
-    .then(tabs => tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found'))
+    .then(tabs => tabs[0] ? loadTabSettings(tabs[0]) : Promise.reject('No tab found'))
     .catch(handleError);
 console.log('enlight-yt-popup.js loaded');
 
@@ -225,12 +238,21 @@ console.log('enlight-yt-popup.js loaded');
 Object.defineProperty(exports, "__esModule", { value: true });
 var MessageCommandEnum;
 (function (MessageCommandEnum) {
+    // eslint-disable-next-line no-unused-vars
+    MessageCommandEnum["SetInvert"] = "set-invert";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetBrightness"] = "set-brightness";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetContrast"] = "set-contrast";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetSaturate"] = "set-saturate";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetHueRotate"] = "set-hue-rotate";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetSepia"] = "set-sepia";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["GetTabSettings"] = "get-tab-settings";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["ConsoleLog"] = "console-log";
 })(MessageCommandEnum || (MessageCommandEnum = {}));
 exports.MessageCommandEnum = MessageCommandEnum;

@@ -117,11 +117,19 @@ let inititalised = false;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
     }
     function getLocalStorage() {
-        const settings = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        return settings ? settings : { brightness: 1, contrast: 1, saturate: 1, hueRotate: 0, sepia: 0 };
+        const defaultSettings = { invert: 0, brightness: 1, contrast: 1, saturate: 1, hueRotate: 0, sepia: 0 };
+        try {
+            const settings = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            return settings ? settings : defaultSettings;
+        }
+        catch (e) {
+            console.error(e);
+        }
+        return defaultSettings;
     }
     function restoreFromStorage() {
         cache = getLocalStorage();
+        setInvert(cache.invert);
         setBrightness(cache.brightness);
         setContrast(cache.contrast);
         setSaturate(cache.saturate);
@@ -134,6 +142,9 @@ let inititalised = false;
     function setCSSVar(key, value, type = '') {
         setLocalStorage(cssKeys_1.CSS_CACHE_MAP[key], value);
         root.style.setProperty(key, `${value}${type}`);
+    }
+    function setInvert(vFloat) {
+        setCSSVar(cssKeys_1.CSS_KEYS.INVERT, vFloat);
     }
     function setBrightness(vFloat) {
         setCSSVar(cssKeys_1.CSS_KEYS.BRIGHTNESS, vFloat);
@@ -160,6 +171,9 @@ let inititalised = false;
      */
     browser.runtime.onMessage.addListener((message) => {
         switch (message.command) {
+            case types_1.MessageCommandEnum.SetInvert:
+                applyMessage(setInvert, message);
+                break;
             case types_1.MessageCommandEnum.SetBrightness:
                 applyMessage(setBrightness, message);
                 break;
@@ -202,6 +216,7 @@ let inititalised = false;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const CSS_KEYS = {
+    INVERT: '--brf-vfloat-invert',
     BRIGHTNESS: '--brf-vfloat-brightness',
     CONTRAST: '--brf-vfloat-contrast',
     SATURATE: '--brf-vfloat-saturate',
@@ -210,6 +225,7 @@ const CSS_KEYS = {
 };
 exports.CSS_KEYS = CSS_KEYS;
 const CSS_CACHE_MAP = {
+    [CSS_KEYS.INVERT]: 'invert',
     [CSS_KEYS.BRIGHTNESS]: 'brightness',
     [CSS_KEYS.CONTRAST]: 'contrast',
     [CSS_KEYS.SATURATE]: 'saturate',
@@ -233,12 +249,21 @@ exports.CSS_CACHE_MAP = CSS_CACHE_MAP;
 Object.defineProperty(exports, "__esModule", { value: true });
 var MessageCommandEnum;
 (function (MessageCommandEnum) {
+    // eslint-disable-next-line no-unused-vars
+    MessageCommandEnum["SetInvert"] = "set-invert";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetBrightness"] = "set-brightness";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetContrast"] = "set-contrast";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetSaturate"] = "set-saturate";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetHueRotate"] = "set-hue-rotate";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["SetSepia"] = "set-sepia";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["GetTabSettings"] = "get-tab-settings";
+    // eslint-disable-next-line no-unused-vars
     MessageCommandEnum["ConsoleLog"] = "console-log";
 })(MessageCommandEnum || (MessageCommandEnum = {}));
 exports.MessageCommandEnum = MessageCommandEnum;

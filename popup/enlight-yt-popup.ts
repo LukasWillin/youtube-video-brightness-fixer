@@ -20,19 +20,26 @@ function sendMessage(tab, message) : Promise<object>
         .catch(handleError);
 }
 
-function loadSettings(tab)
+function loadTabSettings(tab)
 {
     return browser.tabs.sendMessage(tab.id, { 'command': MessageCommandEnum.GetTabSettings })
         .then((message : SettingsResponseMessage) =>
         {
+            sliderInvert.value = JSON.stringify(message.response.invert);
+            fieldInvert.value = JSON.stringify(message.response.invert);
+            
             sliderBrightness.value = JSON.stringify(message.response.brightness);
             fieldBrightness.value = JSON.stringify(message.response.brightness);
+            
             sliderContrast.value = JSON.stringify(message.response.contrast);
             fieldContrast.value = JSON.stringify(message.response.contrast);
+            
             sliderSaturate.value = JSON.stringify(message.response.saturate);
             fieldSaturate.value = JSON.stringify(message.response.saturate);
+            
             sliderHueRotate.value = JSON.stringify(message.response.hueRotate);
             fieldHueRotate.value = JSON.stringify(message.response.hueRotate);
+            
             sliderSepia.value = JSON.stringify(message.response.sepia);
             fieldSepia.value = JSON.stringify(message.response.sepia);
         }).catch(handleError);
@@ -49,6 +56,9 @@ function sendMessageToActive(message)
             return Promise.resolve(null);
         });
 }
+
+const sliderInvert : HTMLInputElement = document.querySelector('input#slider-invert');
+const fieldInvert : HTMLInputElement = document.querySelector('input#field-invert');
 
 const sliderBrightness : HTMLInputElement = document.querySelector('input#slider-brightness');
 const fieldBrightness : HTMLInputElement = document.querySelector('input#field-brightness');
@@ -81,6 +91,7 @@ function bindFieldAndSlider(fieldInput: HTMLInputElement, sliderInput: HTMLInput
     });
 }
 
+bindFieldAndSlider(fieldInvert, sliderInvert);
 bindFieldAndSlider(fieldBrightness, sliderBrightness);
 bindFieldAndSlider(fieldContrast, sliderContrast);
 bindFieldAndSlider(fieldSaturate, sliderSaturate);
@@ -94,6 +105,18 @@ function addNumberInputEventListener(eventListener, ...numberInputs: HTMLInputEl
         numberInputs[i].addEventListener('input', eventListener);
     }
 }
+
+addNumberInputEventListener(e =>
+{
+    // console.debug('event-change-invert:', e);
+
+    const eventTarget = e.currentTarget as NumberEventTarget;
+
+    sendMessageToActive({
+        command: MessageCommandEnum.SetInvert,
+        args: [eventTarget.valueAsNumber]
+    });
+}, fieldInvert, sliderInvert);
 
 addNumberInputEventListener(e =>
 {
@@ -156,7 +179,7 @@ addNumberInputEventListener(e =>
 }, fieldSepia, sliderSepia);
 
 browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
-    .then(tabs => tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found'))
+    .then(tabs => tabs[0] ? loadTabSettings(tabs[0]) : Promise.reject('No tab found'))
     .catch(handleError);
 
 console.log('enlight-yt-popup.js loaded');

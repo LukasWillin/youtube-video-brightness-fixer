@@ -1,5 +1,6 @@
 
 const CSS_KEYS = {
+    INVERT: '--brf-vfloat-invert',
     BRIGHTNESS: '--brf-vfloat-brightness',
     CONTRAST: '--brf-vfloat-contrast',
     SATURATE: '--brf-vfloat-saturate',
@@ -8,6 +9,7 @@ const CSS_KEYS = {
 };
 
 const CSS_CACHE_MAP = {
+    [CSS_KEYS.INVERT]: 'invert',
     [CSS_KEYS.BRIGHTNESS]: 'brightness',
     [CSS_KEYS.CONTRAST]: 'contrast',
     [CSS_KEYS.SATURATE]: 'saturate',

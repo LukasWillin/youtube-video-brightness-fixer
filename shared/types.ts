@@ -6,12 +6,21 @@ interface IMessage
 
 enum MessageCommandEnum
 {
+    // eslint-disable-next-line no-unused-vars
+    SetInvert = 'set-invert',
+    // eslint-disable-next-line no-unused-vars
     SetBrightness = 'set-brightness',
+    // eslint-disable-next-line no-unused-vars
     SetContrast = 'set-contrast',
+    // eslint-disable-next-line no-unused-vars
     SetSaturate = 'set-saturate',
+    // eslint-disable-next-line no-unused-vars
     SetHueRotate = 'set-hue-rotate',
+    // eslint-disable-next-line no-unused-vars
     SetSepia = 'set-sepia',
+    // eslint-disable-next-line no-unused-vars
     GetTabSettings = 'get-tab-settings',
+    // eslint-disable-next-line no-unused-vars
     ConsoleLog = 'console-log'
 }
 
@@ -27,6 +36,7 @@ class SettingsResponseMessage
 
 interface ISettings
 {
+    invert: number,
     brightness: number,
     contrast: number,
     saturate: number,
