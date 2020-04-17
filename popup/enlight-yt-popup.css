@@ -1,7 +1,8 @@
 html,
 body {
-    width: 200px;
-    height: 400px;
+    max-width: 24rem;
+    width: 24rem;
+    min-width: 24rem;
 }
 
 
@@ -23,4 +24,47 @@ body {
 
 .reset:hover {
     background-color: #EAEA9D;
+}
+
+label
+{
+    display: block;
+}
+
+input[type="number"]
+{
+    width: 3rem;
+    display: inline-block;
+}
+
+input[type="range"]
+{
+    display: inline-block;
+    width: 19rem;
+    -webkit-appearance: none;
+    background: #d3d3d3;
+    outline: none;
+}
+  
+input[type="range"]:hover
+{
+    opacity: 1;
+}
+  
+input[type="range"]::-webkit-slider-thumb
+{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 8px;
+    height: 24px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+  
+input[type="range"]::-moz-range-thumb
+{
+    width: 8px;
+    height: 24px;
+    background: #4CAF50;
+    cursor: pointer;
 }

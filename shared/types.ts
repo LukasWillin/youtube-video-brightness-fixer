@@ -34,4 +34,10 @@ interface ISettings
     sepia: number
 }
 
-export { IMessage, ISettings, IResponseMessage, SettingsResponseMessage, MessageCommandEnum };
+interface NumberEventTarget extends EventTarget
+{
+    valueAsNumber: number,
+    value: string
+}
+
+export { IMessage, ISettings, IResponseMessage, SettingsResponseMessage, MessageCommandEnum, NumberEventTarget };

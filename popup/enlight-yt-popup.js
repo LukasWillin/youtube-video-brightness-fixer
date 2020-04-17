@@ -185,51 +185,76 @@ function sendMessageToActive(message) {
         return Promise.resolve(null);
     });
 }
+const sliderBrightness = document.querySelector('input#slider-brightness');
 const fieldBrightness = document.querySelector('input#field-brightness');
+const sliderContrast = document.querySelector('input#slider-contrast');
 const fieldContrast = document.querySelector('input#field-contrast');
+const sliderSaturate = document.querySelector('input#slider-saturate');
 const fieldSaturate = document.querySelector('input#field-saturate');
+const sliderHueRotate = document.querySelector('input#slider-hue-rotate');
 const fieldHueRotate = document.querySelector('input#field-hue-rotate');
+const sliderSepia = document.querySelector('input#slider-sepia');
 const fieldSepia = document.querySelector('input#field-sepia');
-fieldBrightness.addEventListener('change', e => {
+function bindFieldAndSlider(fieldInput, sliderInput) {
+    fieldInput.addEventListener('input', e => {
+        const eventTarget = e.currentTarget;
+        sliderInput.value = eventTarget.value;
+    });
+    sliderInput.addEventListener('input', e => {
+        const eventTarget = e.currentTarget;
+        fieldInput.value = eventTarget.value;
+    });
+}
+bindFieldAndSlider(fieldBrightness, sliderBrightness);
+bindFieldAndSlider(fieldContrast, sliderContrast);
+bindFieldAndSlider(fieldSaturate, sliderSaturate);
+bindFieldAndSlider(fieldHueRotate, sliderHueRotate);
+bindFieldAndSlider(fieldSepia, sliderSepia);
+function addNumberInputEventListener(eventListener, ...numberInputs) {
+    for (let i in numberInputs) {
+        numberInputs[i].addEventListener('input', eventListener);
+    }
+}
+addNumberInputEventListener(e => {
     console.debug('event-change-brightness:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetBrightness,
         args: [eventTarget.valueAsNumber]
     });
-});
-fieldContrast.addEventListener('change', e => {
+}, fieldBrightness, sliderBrightness);
+addNumberInputEventListener(e => {
     console.debug('event-change-contrast:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetContrast,
         args: [eventTarget.valueAsNumber]
     });
-});
-fieldSaturate.addEventListener('change', e => {
+}, fieldContrast, sliderContrast);
+addNumberInputEventListener(e => {
     console.debug('event-change-saturate:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetSaturate,
         args: [eventTarget.valueAsNumber]
     });
-});
-fieldHueRotate.addEventListener('change', e => {
+}, fieldSaturate, sliderSaturate);
+addNumberInputEventListener(e => {
     console.debug('event-change-hue-rotate:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetHueRotate,
         args: [eventTarget.valueAsNumber]
     });
-});
-fieldSepia.addEventListener('change', e => {
+}, fieldHueRotate, sliderHueRotate);
+addNumberInputEventListener(e => {
     console.debug('event-change-sepia:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetSepia,
         args: [eventTarget.valueAsNumber]
     });
-});
+}, fieldSepia, sliderSepia);
 browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
     .then(tabs => tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found'))
     .catch(handleError);
