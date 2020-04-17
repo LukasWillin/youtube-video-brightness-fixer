@@ -34,6 +34,7 @@ label
 input[type="number"]
 {
     width: 3rem;
+    height: 2.3rem;
     display: inline-block;
 }
 
@@ -41,9 +42,11 @@ input[type="range"]
 {
     display: inline-block;
     width: 19rem;
+    height: 2.3rem;
     -webkit-appearance: none;
     background: #d3d3d3;
     outline: none;
+    vertical-align: middle;
 }
   
 input[type="range"]:hover
@@ -56,15 +59,19 @@ input[type="range"]::-webkit-slider-thumb
     -webkit-appearance: none;
     appearance: none;
     width: 8px;
-    height: 24px;
-    background: #4CAF50;
+    height: 100%;
+    background: #333;
     cursor: pointer;
+    border: none;
+    border-radius: 0;
 }
   
 input[type="range"]::-moz-range-thumb
 {
     width: 8px;
-    height: 24px;
-    background: #4CAF50;
+    height: 100%;
+    background: #333;
     cursor: pointer;
+    border: none;
+    border-radius: 0;
 }

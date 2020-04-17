@@ -99,61 +99,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // eslint-disable-next-line no-unused-vars
 const types_1 = __webpack_require__(/*! ../shared/types */ "./shared/types.ts");
 const URL_YT = '*://*.youtube.com/*';
-// browser.tabs.create({url: "/my-page.html"}).then(() => {
-//     browser.tabs.executeScript({
-//       code: `console.log('location:', window.location.href);`
-//     });
-//   });
-// // tabs.query doc - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/Tabs/query
-// return browser.tabs.query({ url: "*://*.youtube.com/*" })
-// .then(tabs =>
-// {
-//     if (tabs)
-//     {
-//         tabs.forEach(t => browser.tabs.sendMessage(tab.id, message));
-//     }
-// })
-// .catch(handleError);
-// /**
-//          * Insert the page-hiding CSS into the active tab,
-//          * then get the beast URL and
-//          * send a "beastify" message to the content script in the active tab.
-//          */
-//         function beastify(tabs)
-//         {
-//             browser.tabs.insertCSS({code: hidePage}).then(() =>
-//             {
-//                 let url = beastNameToURL(e.target.textContent);
-//                 browser.tabs.sendMessage(tabs[0].id, {
-//                     command: "beastify",
-//                     beastURL: url
-//                 });
-//             });
-//         }
-//   browser.tabs.removeCSS({code: hidePage}).then(() =>
-//   {
-//       browser.tabs.sendMessage(tabs[0].id, {
-//           command: "reset",
-//       });
-//   });
-// /**
-//  * Get the active tab,
-//  * then call "beastify()" or "reset()" as appropriate.
-//  */
-// if (e.target.classList.contains("beast"))
-// {
-//     browser.tabs.query({active: true, currentWindow: true})
-//         .then(beastify)
-//         .catch(reportError);
-// }
-// /**
-//  * When the popup loads, inject a content script into the active tab,
-//  * and add a click handler.
-//  * If we couldn't inject the script, handle the error.
-//  */
-// browser.tabs.executeScript({file: "/content_scripts/beastify.js"})
-//     .then((e) => {  })
-//     .catch(reportExecuteScriptError);
 /**
  * Show error in popup and console.
  */
@@ -170,10 +115,15 @@ function sendMessage(tab, message) {
 function loadSettings(tab) {
     return browser.tabs.sendMessage(tab.id, { 'command': types_1.MessageCommandEnum.GetTabSettings })
         .then((message) => {
+        sliderBrightness.value = JSON.stringify(message.response.brightness);
         fieldBrightness.value = JSON.stringify(message.response.brightness);
+        sliderContrast.value = JSON.stringify(message.response.contrast);
         fieldContrast.value = JSON.stringify(message.response.contrast);
+        sliderSaturate.value = JSON.stringify(message.response.saturate);
         fieldSaturate.value = JSON.stringify(message.response.saturate);
+        sliderHueRotate.value = JSON.stringify(message.response.hueRotate);
         fieldHueRotate.value = JSON.stringify(message.response.hueRotate);
+        sliderSepia.value = JSON.stringify(message.response.sepia);
         fieldSepia.value = JSON.stringify(message.response.sepia);
     }).catch(handleError);
 }
@@ -216,7 +166,7 @@ function addNumberInputEventListener(eventListener, ...numberInputs) {
     }
 }
 addNumberInputEventListener(e => {
-    console.debug('event-change-brightness:', e);
+    // console.debug('event-change-brightness:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetBrightness,
@@ -224,7 +174,7 @@ addNumberInputEventListener(e => {
     });
 }, fieldBrightness, sliderBrightness);
 addNumberInputEventListener(e => {
-    console.debug('event-change-contrast:', e);
+    // console.debug('event-change-contrast:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetContrast,
@@ -232,7 +182,7 @@ addNumberInputEventListener(e => {
     });
 }, fieldContrast, sliderContrast);
 addNumberInputEventListener(e => {
-    console.debug('event-change-saturate:', e);
+    // console.debug('event-change-saturate:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetSaturate,
@@ -240,7 +190,7 @@ addNumberInputEventListener(e => {
     });
 }, fieldSaturate, sliderSaturate);
 addNumberInputEventListener(e => {
-    console.debug('event-change-hue-rotate:', e);
+    // console.debug('event-change-hue-rotate:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetHueRotate,
@@ -248,7 +198,7 @@ addNumberInputEventListener(e => {
     });
 }, fieldHueRotate, sliderHueRotate);
 addNumberInputEventListener(e => {
-    console.debug('event-change-sepia:', e);
+    // console.debug('event-change-sepia:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
         command: types_1.MessageCommandEnum.SetSepia,
