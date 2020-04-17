@@ -4,6 +4,17 @@ interface IMessage
     args: Array<any>
 }
 
+enum MessageCommandEnum
+{
+    SetBrightness = 'set-brightness',
+    SetContrast = 'set-contrast',
+    SetSaturate = 'set-saturate',
+    SetHueRotate = 'set-hue-rotate',
+    SetSepia = 'set-sepia',
+    GetTabSettings = 'get-tab-settings',
+    ConsoleLog = 'console-log'
+}
+
 interface IResponseMessage 
 {
     response: any
@@ -23,4 +34,4 @@ interface ISettings
     sepia: number
 }
 
-export { IMessage, ISettings, IResponseMessage, SettingsResponseMessage };
+export { IMessage, ISettings, IResponseMessage, SettingsResponseMessage, MessageCommandEnum };

@@ -2,7 +2,7 @@
 import { CSS_KEYS, CSS_CACHE_MAP } from '../shared/cssKeys';
 
 // eslint-disable-next-line no-unused-vars
-import { IMessage, ISettings } from '../shared/types';
+import { IMessage, ISettings, MessageCommandEnum } from '../shared/types';
 
 let inititalised = false;
 
@@ -89,12 +89,6 @@ let inititalised = false;
 
     //#endregion
     
-    // setBrightness(0.9);
-    // setContrast(1);
-    // setSaturate(1);
-    // setHueRotate(0);
-    // setSepia(0);
-
     restoreFromStorage();
 
     function applyMessage(fn : Function, message: IMessage)
@@ -109,28 +103,29 @@ let inititalised = false;
     {
         switch (message.command)
         {
-            case 'set-brightness':
+            case MessageCommandEnum.SetBrightness:
                 applyMessage(setBrightness, message);
                 break;
-            case 'set-contrast':
+            case MessageCommandEnum.SetContrast:
                 applyMessage(setContrast, message);
                 break;
-            case 'set-saturate':
+            case MessageCommandEnum.SetSaturate:
                 applyMessage(setSaturate, message);
                 break;
-            case 'set-hue-rotate':
+            case MessageCommandEnum.SetHueRotate:
                 applyMessage(setHueRotate, message);
                 break;
-            case 'set-sepia':
+            case MessageCommandEnum.SetSepia:
                 applyMessage(setSepia, message);
                 break;
-            case 'get-settings':
+            case MessageCommandEnum.GetTabSettings:
                 return Promise.resolve({ response: getLocalStorage() });
-            case 'console-log':
-                console.log.apply(console, message.args);
+
+            case MessageCommandEnum.ConsoleLog:
+                console.log(...message.args);
                 break;
             default:
-                console.debug(message);
+                console.warn(message);
                 break;
         }
     });

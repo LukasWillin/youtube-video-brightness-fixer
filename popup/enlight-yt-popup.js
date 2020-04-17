@@ -96,6 +96,8 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+// eslint-disable-next-line no-unused-vars
+const types_1 = __webpack_require__(/*! ../shared/types */ "./shared/types.ts");
 const URL_YT = '*://*.youtube.com/*';
 // browser.tabs.create({url: "/my-page.html"}).then(() => {
 //     browser.tabs.executeScript({
@@ -156,9 +158,9 @@ const URL_YT = '*://*.youtube.com/*';
  * Show error in popup and console.
  */
 function handleError(error) {
-    document.querySelector("#popup-content").classList.add("hidden");
-    document.querySelector("#error-content").classList.remove("hidden");
-    document.querySelector("#error-content-exception").innerHTML = JSON.stringify(error);
+    document.querySelector('#popup-content').classList.add('hidden');
+    document.querySelector('#error-content').classList.remove('hidden');
+    document.querySelector('#error-content-exception').innerHTML = JSON.stringify(error);
     console.error(`Error in Enlight-YT: ${error.message}`);
 }
 function sendMessage(tab, message) {
@@ -166,7 +168,7 @@ function sendMessage(tab, message) {
         .catch(handleError);
 }
 function loadSettings(tab) {
-    return browser.tabs.sendMessage(tab.id, { 'command': 'get-settings' })
+    return browser.tabs.sendMessage(tab.id, { 'command': types_1.MessageCommandEnum.GetTabSettings })
         .then((message) => {
         fieldBrightness.value = JSON.stringify(message.response.brightness);
         fieldContrast.value = JSON.stringify(message.response.contrast);
@@ -189,51 +191,77 @@ const fieldSaturate = document.querySelector('input#field-saturate');
 const fieldHueRotate = document.querySelector('input#field-hue-rotate');
 const fieldSepia = document.querySelector('input#field-sepia');
 fieldBrightness.addEventListener('change', e => {
-    console.debug("event-change-brightness:", e);
+    console.debug('event-change-brightness:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
-        command: "set-brightness",
+        command: types_1.MessageCommandEnum.SetBrightness,
         args: [eventTarget.valueAsNumber]
     });
 });
 fieldContrast.addEventListener('change', e => {
-    console.debug("event-change-contrast:", e);
+    console.debug('event-change-contrast:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
-        command: "set-contrast",
+        command: types_1.MessageCommandEnum.SetContrast,
         args: [eventTarget.valueAsNumber]
     });
 });
 fieldSaturate.addEventListener('change', e => {
-    console.debug("event-change-saturate:", e);
+    console.debug('event-change-saturate:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
-        command: "set-saturate",
+        command: types_1.MessageCommandEnum.SetSaturate,
         args: [eventTarget.valueAsNumber]
     });
 });
 fieldHueRotate.addEventListener('change', e => {
-    console.debug("event-change-hue-rotate:", e);
+    console.debug('event-change-hue-rotate:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
-        command: "set-hue-rotate",
+        command: types_1.MessageCommandEnum.SetHueRotate,
         args: [eventTarget.valueAsNumber]
     });
 });
 fieldSepia.addEventListener('change', e => {
-    console.debug("event-change-sepia:", e);
+    console.debug('event-change-sepia:', e);
     const eventTarget = e.currentTarget;
     sendMessageToActive({
-        command: "console-log",
+        command: types_1.MessageCommandEnum.SetSepia,
         args: [eventTarget.valueAsNumber]
     });
 });
 browser.tabs.query({ active: true, currentWindow: true, url: URL_YT })
-    .then(tabs => {
-    return tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found');
-})
+    .then(tabs => tabs[0] ? loadSettings(tabs[0]) : Promise.reject('No tab found'))
     .catch(handleError);
-console.log("enlight-yt-popup.js loaded");
+console.log('enlight-yt-popup.js loaded');
+
+
+/***/ }),
+
+/***/ "./shared/types.ts":
+/*!*************************!*\
+  !*** ./shared/types.ts ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var MessageCommandEnum;
+(function (MessageCommandEnum) {
+    MessageCommandEnum["SetBrightness"] = "set-brightness";
+    MessageCommandEnum["SetContrast"] = "set-contrast";
+    MessageCommandEnum["SetSaturate"] = "set-saturate";
+    MessageCommandEnum["SetHueRotate"] = "set-hue-rotate";
+    MessageCommandEnum["SetSepia"] = "set-sepia";
+    MessageCommandEnum["GetTabSettings"] = "get-tab-settings";
+    MessageCommandEnum["ConsoleLog"] = "console-log";
+})(MessageCommandEnum || (MessageCommandEnum = {}));
+exports.MessageCommandEnum = MessageCommandEnum;
+class SettingsResponseMessage {
+}
+exports.SettingsResponseMessage = SettingsResponseMessage;
 
 
 /***/ })

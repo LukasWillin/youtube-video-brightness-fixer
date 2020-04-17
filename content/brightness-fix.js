@@ -97,6 +97,8 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const cssKeys_1 = __webpack_require__(/*! ../shared/cssKeys */ "./shared/cssKeys.ts");
+// eslint-disable-next-line no-unused-vars
+const types_1 = __webpack_require__(/*! ../shared/types */ "./shared/types.ts");
 let inititalised = false;
 (function () {
     let cache = {};
@@ -130,10 +132,8 @@ let inititalised = false;
     //#region CSS Injection
     let root = document.documentElement;
     function setCSSVar(key, value, type = '') {
-        console.log(`set css variable > ${key}: ${value}${type};`);
         setLocalStorage(cssKeys_1.CSS_CACHE_MAP[key], value);
         root.style.setProperty(key, `${value}${type}`);
-        console.log("done");
     }
     function setBrightness(vFloat) {
         setCSSVar(cssKeys_1.CSS_KEYS.BRIGHTNESS, vFloat);
@@ -151,11 +151,6 @@ let inititalised = false;
         setCSSVar(cssKeys_1.CSS_KEYS.SEPIA, vFloat);
     }
     //#endregion
-    // setBrightness(0.9);
-    // setContrast(1);
-    // setSaturate(1);
-    // setHueRotate(0);
-    // setSepia(0);
     restoreFromStorage();
     function applyMessage(fn, message) {
         return fn.apply(null, message.args);
@@ -165,32 +160,32 @@ let inititalised = false;
      */
     browser.runtime.onMessage.addListener((message) => {
         switch (message.command) {
-            case 'set-brightness':
+            case types_1.MessageCommandEnum.SetBrightness:
                 applyMessage(setBrightness, message);
                 break;
-            case 'set-contrast':
+            case types_1.MessageCommandEnum.SetContrast:
                 applyMessage(setContrast, message);
                 break;
-            case 'set-saturate':
+            case types_1.MessageCommandEnum.SetSaturate:
                 applyMessage(setSaturate, message);
                 break;
-            case 'set-hue-rotate':
+            case types_1.MessageCommandEnum.SetHueRotate:
                 applyMessage(setHueRotate, message);
                 break;
-            case 'set-sepia':
+            case types_1.MessageCommandEnum.SetSepia:
                 applyMessage(setSepia, message);
                 break;
-            case 'get-settings':
+            case types_1.MessageCommandEnum.GetTabSettings:
                 return Promise.resolve({ response: getLocalStorage() });
-            case 'console-log':
-                console.log.apply(console, message.args);
+            case types_1.MessageCommandEnum.ConsoleLog:
+                console.log(...message.args);
                 break;
             default:
-                console.debug(message);
+                console.warn(message);
                 break;
         }
     });
-    console.log("Script content ran to end");
+    console.log('>> content-script loaded');
 })();
 
 
@@ -222,6 +217,34 @@ const CSS_CACHE_MAP = {
     [CSS_KEYS.SEPIA]: 'sepia'
 };
 exports.CSS_CACHE_MAP = CSS_CACHE_MAP;
+
+
+/***/ }),
+
+/***/ "./shared/types.ts":
+/*!*************************!*\
+  !*** ./shared/types.ts ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var MessageCommandEnum;
+(function (MessageCommandEnum) {
+    MessageCommandEnum["SetBrightness"] = "set-brightness";
+    MessageCommandEnum["SetContrast"] = "set-contrast";
+    MessageCommandEnum["SetSaturate"] = "set-saturate";
+    MessageCommandEnum["SetHueRotate"] = "set-hue-rotate";
+    MessageCommandEnum["SetSepia"] = "set-sepia";
+    MessageCommandEnum["GetTabSettings"] = "get-tab-settings";
+    MessageCommandEnum["ConsoleLog"] = "console-log";
+})(MessageCommandEnum || (MessageCommandEnum = {}));
+exports.MessageCommandEnum = MessageCommandEnum;
+class SettingsResponseMessage {
+}
+exports.SettingsResponseMessage = SettingsResponseMessage;
 
 
 /***/ })

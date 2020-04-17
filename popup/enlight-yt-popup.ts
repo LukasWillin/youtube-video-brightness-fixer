@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { IMessage, ISettings, SettingsResponseMessage } from '../shared/types';
+import { IMessage, ISettings, SettingsResponseMessage, MessageCommandEnum } from '../shared/types';
 
 const URL_YT = '*://*.youtube.com/*';
 
@@ -85,7 +85,7 @@ function sendMessage(tab, message) : Promise<object>
 
 function loadSettings(tab)
 {
-    return browser.tabs.sendMessage(tab.id, { 'command': 'get-settings' })
+    return browser.tabs.sendMessage(tab.id, { 'command': MessageCommandEnum.GetTabSettings })
         .then((message : SettingsResponseMessage) =>
         {
             fieldBrightness.value = JSON.stringify(message.response.brightness);
@@ -121,7 +121,7 @@ fieldBrightness.addEventListener('change', e =>
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: 'set-brightness',
+        command: MessageCommandEnum.SetBrightness,
         args: [eventTarget.valueAsNumber]
     });
 });
@@ -133,7 +133,7 @@ fieldContrast.addEventListener('change', e =>
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: 'set-contrast',
+        command: MessageCommandEnum.SetContrast,
         args: [eventTarget.valueAsNumber]
     });
 });
@@ -145,7 +145,7 @@ fieldSaturate.addEventListener('change', e =>
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: 'set-saturate',
+        command: MessageCommandEnum.SetSaturate,
         args: [eventTarget.valueAsNumber]
     });
 });
@@ -157,7 +157,7 @@ fieldHueRotate.addEventListener('change', e =>
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: 'set-hue-rotate',
+        command: MessageCommandEnum.SetHueRotate,
         args: [eventTarget.valueAsNumber]
     });
 });
@@ -169,7 +169,7 @@ fieldSepia.addEventListener('change', e =>
     const eventTarget : any = e.currentTarget;
 
     sendMessageToActive({
-        command: 'console-log',
+        command: MessageCommandEnum.SetSepia,
         args: [eventTarget.valueAsNumber]
     });
 });
